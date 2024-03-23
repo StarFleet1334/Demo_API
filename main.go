@@ -1,16 +1,17 @@
 package main
 
-import "net/http"
+import (
+	"demo_api/handlers"
+	"net/http"
+)
 
 func main() {
 	mux := http.NewServeMux()
-	mux.Handle("/", &homeHandler{})
+	mux.Handle("/", &handlers.HomeHandler{})
+	mux.Handle("/books/", &handlers.BookHandler{})
 
-	http.ListenAndServe("localhost:8080", mux)
-}
-
-type homeHandler struct{}
-
-func (h *homeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("This is my home page"))
+	err := http.ListenAndServe("localhost:8080", mux)
+	if err != nil {
+		return
+	}
 }
